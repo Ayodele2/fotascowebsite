@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website with Login and Registration Form | CodingNepal</title>
+    <!-- Google Fonts Link For Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0">
+    <link rel="stylesheet" href="/css/signup.css">
+    
+</head>
+<body>
+    <div class="wrapper">
+        <header><h2>Create Account</h2></header>
+        <p>To become a part of our community, please sign up using your personal information.</p>
+        <form action="#">
+          <div class="field email">
+            <div class="input-area">
+              <input type="text" placeholder="Email Address" required>
+              <i class="icon fas fa-envelope"></i>
+              <i class="error error-icon fas fa-exclamation-circle"></i>
+            </div>
+            <div class="error error-txt">Email can't be blank</div>
+          </div>
+          <div class="field password">
+            <div class="input-area">
+              <input type="password" placeholder="Password" required>
+              <i class="icon fas fa-lock"></i>
+              <i class="error error-icon fas fa-exclamation-circle"></i>
+            </div>
+            <div class="error error-txt">Create password</div>
+          </div>
+          <div class="policy-text">
+            <input type="checkbox" id="policy">
+            <label for="policy">
+                I agree the
+                <a href="#" class="option">Terms & Conditions</a>
+            </label>  
+          <div class="pass-txt"><a href="#">Forgot password?</a></div>
+          <input type="submit" value="Create Account">
+        </form>
+    </form>
+    <div class="bottom-link">
+        Already have an account? 
+        <a href="/html/login.html" id="login-link" target="_blank">Login</a>
+      </div>
+    
+
+
+   <script src="/js/signup.js"></script>
+</body>
+</html>
