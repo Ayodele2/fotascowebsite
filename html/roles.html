@@ -20,7 +20,7 @@
 
         <div class="navbar">
             <ul>
-                <li><a href="#Home">Home</a></li>
+                <li><a href="/html/admin.html">Home</a></li>
                 <li><a href="#">Assign role</a></li>
                 <li><a href="#">Delete role</a></li>
             </ul>
@@ -63,56 +63,89 @@
             <div class="title">
                 <span>Roles</span>
             </div>
-            <div class="boxes">
-                <div class="box">
-                    <div class="topic">
-                        <a href="" target="_blank">
-                            staffs
-                        </a>
+            <div class="table">
+                <div class="table_header">
+                    <p>Staff</p>
+                    <div>
+                        <input placeholder="search for staff using name, email address"/>
+                        <button class="search">Search</button>
                     </div>
-                    <p>
-                    Assign role
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque nesciunt maxime earum error. A deleniti sed laudantium! Aliquam nulla numquam dolore nisi amet. Cum odit consequuntur alias omnis voluptatibus at.
-                    </p>
                 </div>
-                <div class="box">
-
-                    <div class="topic">
-                        <a href="" target="_blank">
-                            guard
-                        </a>
-                    </div>
-                    <p>
-                       this is where you asing roles for guard 
-                    </p>
-                </div>
-
-                <div class="box">
-                    <div class="topic">
-                        <a href="" target="_blank">
-                            interns
-                        </a>
-                    </div>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic ullam ea, tempore soluta quibusdam autem possimus vel libero repellendus mollitia voluptatum dolore facere eligendi minus iusto magnam velit reprehenderit eaque.
-                    </p>
-                </div>
-            </div>
-        </div>
+                <div class="table_section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>S.No</th>
+                                <th>Full Name</th>
+                                <th>Email address</th>
+                                <th>Position</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Jide Olalekan</td>
+                                <td>jolalekan@gmail.com</td>
+                                <td>Project Manager</td>
+                                <td class="active" id="active">Active</td>
+                                <td>
+                                    <button class="roles call">Assign role</button>
+                                    <button class="roles call">Delete role</button>
+                                </td>
+                            </tr>
+                            <tr>
+                              <td>2</td>
+                              <td>Frances Isaac</td>
+                              <td>frances1978@yahoo.com</td>
+                              <td>Backend Developer</td>
+                              <td class="active">Active</td>
+                              <td>
+                                <a href="/html/newroles.html"><button class="roles call">Assign role</button></a>
+                                <button class="roles call">Delete role</button>
+                              </td>
+                          </tr>
+                          <tr>
+                            <td>3</td>
+                            <td>Jessy Okafor P.</td>
+                            <td>jessypokafor@gmail.com</td>
+                            <td>SEO Specialist</td>
+                            <td class="active">Active</td>
+                            <td>
+                                <a href="/html/newroles.html"><button class="roles call">Assign role</button></a>
+                                <button class="roles call">Delete role</button>
+                            </td>
+                        </tr>
+                        <tr>
+                          <td>4</td>
+                          <td>Ogechi Eze</td>
+                          <td>ogeezeifunanya@gmail.com</td>
+                          <td>Consultant</td>
+                          <td class="inactive">Inactive</td>
+                          <td>
+                            <a href="/html/newroles.html"><button class="roles call">Assign role</button></a>
+                            <button class="roles call">Delete role</button>
+                          </td>
+                      </tr>
+                      <tr>
+                        <td>5</td>
+                        <td>Jide Olalekan</td>
+                        <td>jolalekan@gmail.com</td>
+                        <td>Project Manager</td>
+                        <td class="active">Active</td>
+                        <td>
+                            <a href="/html/newroles.html"><button class="roles call">Assign role</button></a>
+                            <button class="roles call">Delete role</button>
+                        </td>
+                    </tr>
+                        </tbody>
+                    </table>
+       
     </section>
 
  
-    <!-- Footer section -->
-    <footer>
-        <div class="footer">
-            <span>
-                Created By
-               
-                    mayor
-                </a>
-            </span>
-        </div>
-    </footer>
+    
     <script src="/js/roles.js"></script>
 </body>
 

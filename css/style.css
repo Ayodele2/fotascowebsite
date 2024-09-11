@@ -57,6 +57,7 @@ html{
   --smaller-font: 1.2rem;
 }
 }
+
 #logo{
   width: 80px;
 }
@@ -72,6 +73,48 @@ body{
   overflow-x: hidden;
   background-color: var(--white-color);
 }
+.button01{
+  display: inline-block;
+  margin-top: 12px;
+}
+.button01 input[type="button"]{
+  color: #fff;
+  font-size: 18px;
+  outline: none;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: #3e2093;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.button01 input[type="button"]:hover{
+  background: #5029bc;
+}
+.guy{
+  font-size: 50px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: bold;
+  font-style: italic;
+  text-transform: uppercase;
+  text-shadow: #C2703D;
+  text-shadow: rgba(216, 106, 3, 0.596);
+  color: #C2703D;
+  
+}
+.otasco{
+  color: #C2703D;
+  text-transform: uppercase;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: bold;
+}
+.ready{
+  color: #C2703D;
+  text-transform: uppercase;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-weight: bold;
+}
+
 
 /* Custom Scrollbar */
 ::selection{

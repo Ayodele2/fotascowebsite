@@ -4,143 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/css/hhh.css">
+    <link rel="stylesheet" href="/css/payroll.css">
 </head>
-<body>
-    <table>
-        <thead>
-          <tr>
-            <th scope="row">
-              Workshops
-            </th>
-            <td colspan="2">
-              August 24th
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">
-              <time datetime="08:30:00">8:30 AM</time>
-            </th>
-            <td colspan="2">
-              Registration
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <time datetime="09:00:00">9:00 AM</time>
-            </th>
-            <td>
-              <a href="speakers.html#adam-connor">
-                <h4>Adam Connor</h4>
-                Lights! Camera! Interaction! Design Inspiration from Filmmakers
-              </a>
-            </td>
-            <td>
-              <a href="speakers.html#jennifer-jones">
-                <h4>Jennifer Jones</h4>
-                What Designers Can Learn from Parenting
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <time datetime="12:30:00">12:30 PM</time>
-            </th>
-            <td colspan="2">
-              Lunch
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">
-              <time datetime="14:00">2:00 PM</time>
-            </th>
-            <td>
-              <a href="speakers.html#tessa-harmon">
-                <h4>Tessa Harmon</h4>
-                Crafty Coding: Generating Knitting Patterns
-              </a>
-            </td>
-            <td>
-              <a href="speakers.html#russ-unger">
-                <h4>Russ Unger</h4>
-                From Muppets to Mastery: Core UX Principles from Mr. Jim Henson
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="table">
+  <div class="table_header">
+      <p>Staff</p>
+      <div>
+          <input placeholder="search for staff using name, email address"/>
+          <button class="search">Search</button>
+      </div>
+  </div>
+  <div class="table_section">
       <table>
-        <thead>
-          <tr>
-            <th scope="row">
-              Workshops
-            </th>
-            <td class="schedule-offset" colspan="2">
-              August 24th
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">
-              <time datetime="08:30:00">8:30 AM</time>
-            </th>
-            <td class="schedule-offset" colspan="2">
-              Registration
-            </td>
-          </tr>
-          ...
-          <tr>
-            <th scope="row">
-              <time datetime="12:30:00">12:30 PM</time>
-            </th>
-            <td class="schedule-offset" colspan="2">
-              Lunch
-            </td>
-          </tr>
-          ...
-        </tbody>
-      </table>
-      <table>
-        <thead>
-          <tr>
-            <th scope="row">
-              Workshops
-            </th>
-            <td colspan="2">
-              August 24th
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">
-              <time datetime="08:30:00">8:30 AM</time>
-            </th>
-            <td colspan="2">
-              Registration
-            </td>
+          <thead>
+              <tr>
+                  <th>S.No</th>
+                  <th>Full Name</th>
+                  <th>Email address</th>
+                  <th>Position</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                  
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>1</td>
+                  <td>Jide Olalekan</td>
+                  <td>jolalekan@gmail.com</td>
+                  <td>Project Manager</td>
+                  <td>#120,000.00</td>
+                  <td class="active">Paid</td>
+          <td>
+              <button class="roles call">Pay</button>
+              <button class="roles call">Eidit</button>
+          </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Frances Isaac</td>
+                <td>frances1978@yahoo.com</td>
+                <td>Backend Developer</td>
+                <td>#120,000.00</td>
+                <td class="active">Paid</td>
+                <td>
+                    <button class="roles call">Pay</button>
+                    <button class="roles call">Eidit</button>
+                </td>
+            <tr>
+              <td>3</td>
+              <td>Jessy Okafor P.</td>
+              <td>jessypokafor@gmail.com</td>
+              <td>SEO Specialist</td>
+              <td>#120,000.00</td>
+              <td class="active">Paid</td>
+          <td>
+              <button class="roles call">Pay</button>
+              <button class="roles call">Eidit</button>
+          </td>
           </tr>
           <tr>
-            <th scope="row">
-              <time datetime="09:00:00">9:00 AM</time>
-            </th>
+            <td>4</td>
+            <td>Ogechi Eze</td>
+            <td>ogeezeifunanya@gmail.com</td>
+            <td>Consultant</td>
+            <td>#120,000.00</td>
+            <td class="inactive">Pending</td>
             <td>
-              <a href="speakers.html#adam-connor">
-                <h4>Adam Connor</h4>
-                Lights! Camera! Interaction! Design Inspiration from Filmmakers
-              </a>
+              <button class="roles call">Pay</button>
+              <button class="roles call">Edit</button>
             </td>
-            <td>
-              <a href="speakers.html#jennifer-jones">
-                <h4>Jennifer Jones</h4>
-                What Designers Can Learn from Parenting
-              </a>
-            </td>
-          </tr>
-        </tbody>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Jide Olalekan</td>
+          <td>jolalekan@gmail.com</td>
+          <td>Project Manager</td>
+          <td>#120,000.00</td>
+          <td class="active">Paid</td>
+          <td>
+              <button class="roles call">Pay</button>
+              <button class="roles call">Eidit</button>
+          </td>
+      </tr>
+          </tbody>
       </table>
+
+</section>
 </body>
 </html>

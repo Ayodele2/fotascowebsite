@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Bootstrap CDN -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <!-- Bootstrap Icons CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css"
+    />
+    <!-- FontAwesome CDN  -->
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container mt-5 m-lg-auto p-5 shadow">
+      <section class="leave-request">
+        <header class="text-center mb-5">
+          <i
+            class="bi bi-person-fill display-1 text-primary"
+            style="font-size: 10rem"
+          ></i>
+          <h1 class="display-1 h1">Leave request form</h1>
+        </header>
+        <!-- Form -->
+
+        <form id="LeaveRequestForm">
+          <!-- Name -->
+          <div class="row mb-3">
+            <label class="form-label">Name</label>
+            <div class="col">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="First Name"
+                id="FirstName"
+              />
+            </div>
+
+            <div class="col">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Last Name"
+                id="LastName"
+              />
+            </div>
+          </div>
+          <!--  Employee ID Remaining vacation days-->
+
+          <div class="row mb-3">
+            <div class="col">
+              <label class="form-label">Employee ID</label
+              ><input
+                type="number"
+                class="form-control"
+                id="EmployeeID"
+                placeholder="Your Employee ID"
+              />
+            </div>
+            <div class="col">
+              <label class="form-label">Remaining payment days</label
+              ><input
+                type="number"
+                class="form-control"
+                id="RemainingDays"
+                placeholder="Your remaining days of payment"
+              />
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col">
+              <label class="form-label"
+                >Start date<small class="text-muted"
+                  >(incl. 1st day)</small
+                ></label
+              ><input type="date" class="form-control" id="StartDate" />
+            </div>
+            <div class="col">
+              <label class="form-label"
+                >payment date
+                <small class="text-muted">(incl. last day)</small></label
+              ><input type="date" class="form-control" id="EndDate" />
+            </div>
+          </div>
+          <button
+            type="submit
+          "
+            class="btn btn-primary w-100 shadow-sm"
+          >
+            Submit
+          </button>
+        </form>
+      </section>
+    </div>
+    <!-- Create leave request -->
+
+    <script src="/js/leave.js"></script>
+  </body>
+</html>

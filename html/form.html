@@ -1,43 +1,120 @@
 <!DOCTYPE html>
+<!--  -->
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="/css/form.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="/css/form.css">
+     
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+   <title>Responsive Regisration Form </title>
 </head>
 <body>
-  <table>
-    <caption>this is a table</caption>
-  <tr>
-    <th>fullname</th>
-    <th>email adress</th>
-    <th>position</th>
-    <th>status</th>
-    <th>action</th>
-  </tr>
+    <div class="container">
+        <header>Registration</header>
 
-  <tr>
-    <td>hjohn</td>
-    <td>h.mrm@gmail.com</td>
-    <td>consultant</td>
-    <td>active</td>
-    <td id="row">
-      <ul>
-        <li><button>edit</button></li>
-        <li><button>delete</button></li>
+        <form action="#">
+            
+            <div class="form first">
+                <div class="details personal">
+                    <span class="title">Personal Details</span>
 
-      </ul>
-    </td>
-  </tr>
+                    <div class="fields">
+                        <div class="input-field">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Enter your name" required>
+                        </div>
 
-  <tr>
-    <td>aporved</td>
-    <td>pending</td>
-    <td>#</td>
-    <td>paid</td>
-  </tr>
+                        <div class="input-field">
+                            <label>Date of Birth</label>
+                            <input type="date" placeholder="Enter birth date" required>
+                        </div>
 
-  </table>
+                        <div class="input-field">
+                            <label>Email</label>
+                            <input type="text" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Mobile Number</label>
+                            <input type="number" placeholder="Enter mobile number" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Gender</label>
+                            <select required>
+                                <option disabled selected>Select gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+
+                        <div class="input-field" id="role">
+                            <label>Roles</label>
+                            <select required>
+                                <option disabled selected>Select Role</option>
+                                <option>Admin</option>
+                                <option>Staffs</option>
+                                <option>Guard</option>
+                            </select>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details ID">
+                    <span class="title">Identity Details</span>
+
+                    <div class="fields">
+                        <div class="input-field">
+                            <label>Acoount Name</label>
+                            <input type="text" placeholder="Enter account type" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Account Number</label>
+                            <input type="text" placeholder="Enter account number" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Bank Name</label>
+                            <input type="text" placeholder="Enter bank name" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Address Name</label>
+                            <input type="number" placeholder="Enter address name" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Name of next of kin</label>
+                            <input type="text" placeholder="Enter your next of kin" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Relationship of next of kin</label>
+                            <input type="text" placeholder="Enter relationship" required>
+                        </div>
+                    </div>
+
+                   <a href="/html/admin.html">
+                    <button class="sumbit">
+                        <span class="btnText">Submit</span>
+                        <i class="uil uil-navigator"></i>
+                    </button>
+                   </a>
+                </div> 
+            </div>
+        </form>
+    </div>
+
+
+    <script src="/js/form.js"></script>
 </body>
 </html>
