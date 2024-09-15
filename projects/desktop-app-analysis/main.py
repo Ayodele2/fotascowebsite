@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget,
     QLabel, QPushButton, QLineEdit, QFrame, QTableWidgetItem, QTableWidget,
-    QListWidget, QMessageBox, QFileDialog, QDialog, QHeaderView, QAbstractItemView
+    QListWidget, QMessageBox, QFileDialog,QListWidgetItem,QSizePolicy,QHeaderView
 )
 import pyqtgraph as pg
 from PyQt5.QtGui import QFont, QIcon, QPixmap
@@ -15,29 +15,55 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from app import EnvironmentalImpactCalculator
+from PyQt5.QtCore import QThread, pyqtSignal
+import core
 data =None
+
+
+# class WorkerThread(QThread):
+#     finished = pyqtSignal()
+
+#     def run(self):
+#         import time
+#         time.sleep(5)
+#         self.finished.emit()
 
 class ProjectItem:
     def __init__(self, name, number):
         self.name = name
         self.number = number
         self.materials = []
+        
+    def __str__(self):
+        return f"{self.name} (#{self.number})"
 
 class Dashboard(QMainWindow):
     def __init__(self):
         super().__init__()
         self.projects = []
         self.current_materials = []
+        # self.thread = WorkerThread()
+        # self.thread.finished.connect(self.on_task_finished)
         self.project_creation_layout = QHBoxLayout()
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.initUI()
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
 
     def initUI(self):
         self.setWindowTitle("Dashboard")
-        # self.setGeometry(100, 100, 1200, 700)
-        self.showMaximized()
+        self.setGeometry(100, 100, 800, 600)
+        # self.showMaximized()
 
-        self.setStyleSheet("background-color: #0f1c29; color: white;")
-
+        self.setStyleSheet("""
+    background-color: #0f1c29;
+    color: white;
+    font-size: 27px;
+    font-family: Arial;
+    font-weight: bold;
+""")
+        self.setFont(QFont('Arial', 18))
+        
         # Main container
         main_widget = QWidget(self)
         self.main_layout = QHBoxLayout(main_widget)
@@ -46,16 +72,13 @@ class Dashboard(QMainWindow):
         self.sidebar_layout = QVBoxLayout()
         sidebar_frame = QFrame()
         sidebar_frame.setStyleSheet("background-color: #1f2e40;")
+        sidebar_frame.setFont(QFont('Arial', 18))
         self.sidebar_layout = QVBoxLayout(sidebar_frame)
 
         # Sidebar buttons
         self.add_sidebar_button("Dashboard", self.sidebar_layout, self.show_dashboard_interface)
-        self.add_sidebar_button("New Project", self.sidebar_layout, self.show_project_management_interface)
-        self.add_sidebar_button("Recent Work", self.sidebar_layout)
-        self.add_sidebar_button("Settings", self.sidebar_layout)
-        self.add_sidebar_button("Login", self.sidebar_layout, self.show_sign_in_interface)
-        self.add_sidebar_button("Sign up", self.sidebar_layout, self.show_sign_up_interface)
-        self.add_sidebar_button("Documentation", self.sidebar_layout)
+        self.add_sidebar_button("Neues Projekt", self.sidebar_layout, self.show_project_management_interface)
+        self.add_sidebar_button("Mein Projekt", self.sidebar_layout,self.my_projects)
 
         self.main_layout.addWidget(sidebar_frame)
         
@@ -213,7 +236,7 @@ class Dashboard(QMainWindow):
         self.clear_content_layout()
 
         if data is None:
-            no_data_label = QLabel("No data loaded. Please import an Excel file.")
+            no_data_label = QLabel("Keine Daten geladen. Bitte importieren Sie eine Excel-Datei.")
             no_data_label.setFont(QFont('Arial', 18))
             no_data_label.setStyleSheet("color: white;")
             self.content_layout.addWidget(no_data_label)
@@ -226,26 +249,20 @@ class Dashboard(QMainWindow):
 
         # Add line chart
         self.update_chart()
-        # self.add_line_chart(chart_layout)
-
-        # # Add bar chart
-        # self.add_bar_chart(chart_layout)
-
-        # # Add pie chart
-        # self.add_pie_chart(chart_layout)
-
-        # # Add histogram
-        # self.add_histogram(chart_layout)
-
-        # Add chart_frame to the main layout
         self.content_layout.addWidget(chart_frame)
+        
+        
 
     def clear_content_layout(self):
-        while self.content_layout.count() > 0:
-            item = self.content_layout.takeAt(0)
-            widget = item.widget()
-            if widget is not None:
-                widget.deleteLater()
+        if hasattr(self, 'content_layout'):
+            while self.content_layout.count():
+                child = self.content_layout.takeAt(0)
+                if child.widget():
+                    child.widget().deleteLater()
+
+
+                
+                
 
     def add_line_chart(self, layout):
         # Plotting the line chart with PyQtGraph
@@ -329,51 +346,201 @@ class Dashboard(QMainWindow):
         
         
     def show_dashboard_interface(self):
-        # Clear existing layout
+        self.clear_project_creation_layout()
         self.clear_content_layout()
-        self.clear_project()
 
         # Welcome Label
-        welcome_label = QLabel("Hi, Taylor Kareem!", self)
-        welcome_label.setFont(QFont('Arial', 18))
-        welcome_label.setStyleSheet("color: white;")
+        welcome_label = QLabel("WILLKOMMEN IM PROJEKT-DASHBOARD!", self)
+        welcome_label.setFont(QFont('Arial', 18, QFont.Bold))
+        welcome_label.setStyleSheet("color: #f0f0f0;")
         self.content_layout.addWidget(welcome_label, alignment=Qt.AlignLeft)
 
+        # Table Frame
         table_frame = QFrame()
-        table_frame.setStyleSheet("background-color: #1f2e40; border-radius: 10px;")
+        table_frame.setStyleSheet(
+            "background-color: #2c3e50; "  # Darker background color
+            "border-radius: 12px; "
+            "padding: 15px; "
+            "border: 2px solid #34495e;"  # Slightly lighter border color
+        )
         table_layout = QVBoxLayout(table_frame)
 
-        table_label = QLabel("Last Invoice", self)
-        table_label.setFont(QFont('Arial', 14))
+        # Table Label
+        table_label = QLabel("Aktuelles Projekt", self)
+        table_label.setFont(QFont('Arial', 14, QFont.Bold))
+        table_label.setStyleSheet("color: #ecf0f1;")
         table_layout.addWidget(table_label, alignment=Qt.AlignLeft)
 
-        # Create table
-        table = QTableWidget(4, 4)
-        table.setHorizontalHeaderLabels(["#Invoice", "Description", "Status", "Amount"])
-        table.setItem(0, 0, QTableWidgetItem("#42526"))
-        table.setItem(0, 1, QTableWidgetItem("Home Chair"))
-        table.setItem(0, 2, QTableWidgetItem("Paid"))
-        table.setItem(0, 3, QTableWidgetItem("$389.05"))
+        # Create Table
+        table = QTableWidget()
+        table.setColumnCount(2)  # Adjust the column count
+        table.setHorizontalHeaderLabels(["Index", "Description"])
 
-        table.setItem(1, 0, QTableWidgetItem("#45456"))
-        table.setItem(1, 1, QTableWidgetItem("Circle Chair"))
-        table.setItem(1, 2, QTableWidgetItem("Pending"))
-        table.setItem(1, 3, QTableWidgetItem("$124.42"))
+        # Fetch Data
+        try:
+            all_project = core.get_all_project()
+        except Exception as e:
+            print(f"Error retrieving projects: {e}")
+            all_project = []
 
-        table.setItem(2, 0, QTableWidgetItem("#47480"))
-        table.setItem(2, 1, QTableWidgetItem("Home Chair"))
-        table.setItem(2, 2, QTableWidgetItem("Paid"))
-        table.setItem(2, 3, QTableWidgetItem("$389.05"))
+        if all_project:
+            table.setRowCount(len(all_project))  # Set the number of rows
 
-        table.setItem(3, 0, QTableWidgetItem("#31349"))
-        table.setItem(3, 1, QTableWidgetItem("Wooden Chair"))
-        table.setItem(3, 2, QTableWidgetItem("Unpaid"))
-        table.setItem(3, 3, QTableWidgetItem("$543.53"))
+            for idx, (index, values) in enumerate(all_project):
+                if "#" in values:
+                    name, number = values.split("#", 1)
+                else:
+                    name, number = values, ""  # Handle case where `#` is not present
 
-        table.setStyleSheet("background-color: #1f2e40; color: white; border: 1px solid #1f2e40;")
+                # Set table items
+                table.setItem(idx, 0, QTableWidgetItem(str(idx + 1)))
+                table.setItem(idx, 1, QTableWidgetItem(f"{name} (#{number})"))
+
+        # Table Header Style
+        table.horizontalHeader().setStyleSheet(
+            "background-color: #34495e; "  # Darker header background
+            "color: #ecf0f1; "  # Light header text color
+            "font-weight: bold;"
+        )
+        table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+
+        # Table Item Style
+        table.setStyleSheet(
+            "background-color: #2c3e50; "  # Table background color
+            "color: #ecf0f1; "  # Table text color
+            "border: 1px solid #34495e;"  # Border color
+        )
+
+        table.setAlternatingRowColors(True)
+        table.setStyleSheet(
+            "alternate-background-color: #1e272e;"  # Alternating row color
+        )
+
         table_layout.addWidget(table)
 
         self.content_layout.addWidget(table_frame)
+
+        # self.show_chart()
+        
+        
+    def show_chart(self):
+
+        # Create a small bar chart
+        bar_chart_frame = QFrame()
+        bar_chart_frame.setStyleSheet("background-color: #2c3e50; border-radius: 12px; padding: 10px; border: 2px solid #34495e;")
+        bar_chart_layout = QVBoxLayout(bar_chart_frame)
+        bar_chart_label = QLabel("Sales Overview", self)
+        bar_chart_label.setFont(QFont('Arial', 12, QFont.Bold))
+        bar_chart_label.setStyleSheet("color: #ecf0f1;")
+        bar_chart_layout.addWidget(bar_chart_label, alignment=Qt.AlignLeft)
+
+        # Plotting Bar Chart
+        bar_fig, bar_ax = plt.subplots(figsize=(5, 2))  # Adjust size to fit the page
+        bar_ax.bar(['Jan', 'Feb', 'Mar', 'Apr'], [10, 20, 15, 25], color='#3498db')
+        bar_ax.set_title('Monthly Usage', fontsize=10)
+        bar_ax.set_xlabel('Month')
+        bar_ax.set_ylabel('Sales')
+        bar_ax.set_facecolor('#2c3e50')
+        bar_ax.xaxis.label.set_color('#ecf0f1')
+        bar_ax.yaxis.label.set_color('#ecf0f1')
+
+        bar_canvas = FigureCanvas(bar_fig)
+        bar_chart_layout.addWidget(bar_canvas)
+        bar_canvas.draw()
+        
+        self.content_layout.addWidget(bar_chart_frame)
+
+        # Create a small pie chart
+        pie_chart_frame = QFrame()
+        pie_chart_frame.setStyleSheet("background-color: #2c3e50; border-radius: 12px; padding: 10px; border: 2px solid #34495e;")
+        pie_chart_layout = QVBoxLayout(pie_chart_frame)
+        pie_chart_label = QLabel("Project Breakdown", self)
+        pie_chart_label.setFont(QFont('Arial', 12, QFont.Bold))
+        pie_chart_label.setStyleSheet("color: #ecf0f1;")
+        pie_chart_layout.addWidget(pie_chart_label, alignment=Qt.AlignLeft)
+
+        # Plotting Pie Chart
+        pie_fig, pie_ax = plt.subplots(figsize=(5, 2))  # Adjust size to fit the page
+        pie_ax.pie([30, 20, 15, 35], labels=['Rent', 'Utilities', 'Groceries', 'Entertainment'], autopct='%1.1f%%', colors=['#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6'])
+        pie_ax.set_title('Project Breakdown', fontsize=10, color='#ecf0f1')
+        pie_ax.set_facecolor('#2c3e50')
+
+        pie_canvas = FigureCanvas(pie_fig)
+        pie_chart_layout.addWidget(pie_canvas)
+        pie_canvas.draw()
+
+        self.content_layout.addWidget(pie_chart_frame)
+
+        
+    def my_projects(self):
+        self.clear_project_creation_layout()
+        self.clear_content_layout()
+        self.title_label = QLabel("Meine Projekte", self)
+
+        self.title_label.setStyleSheet("font-size: 22px; border-radius: 12px; padding: 15px; font-weight: bold; border: 2px solid #34495e; color: white; padding: 10px;")
+        self.content_layout.addWidget(self.title_label)
+
+        try:
+            all_project = core.get_all_project()
+        except Exception as e:
+            print(f"Error retrieving projects: {e}")
+            all_project = None
+
+        if all_project:
+            self.project_list = QListWidget()
+            self.project_list.setStyleSheet("""
+                QListWidget {
+                    font-size: 16px;
+                    background-color: #1f2e40;
+                    border: 2px solid #ddd;
+                    border-radius: 12px;
+                }
+                QListWidget::item {
+                    padding: 15px;
+                }
+                QListWidget::item:selected {
+                    background-color: #007bff;
+                    color: white;
+                }
+            """)
+            self.project_list.itemDoubleClicked.connect(self.open_project)
+
+            for index, values in all_project:
+                if "#" in values:
+                    name, number = values.split("#", 1)
+                    # project = ProjectItem(name, number)
+                    # self.projects.append(project)
+                    # self.project_list.addItem(f"{index}. {name} (#{number})")
+                    project = ProjectItem(name, number)
+                    self.projects.append(project)
+                    # self.project_list.addItem(f"{name} (#{number})")
+                    list_item = QListWidgetItem(str(project))  # Display string format
+                    list_item.setData(Qt.UserRole, project)  # Store the actual ProjectItem
+                    self.project_list.addItem(list_item)
+                else:
+                    print(f"Invalid project format: {values}")
+            self.content_layout.addWidget(self.project_list)
+        else:
+            self.my_project_lists = QListWidget()
+            self.my_project_lists.setStyleSheet("""
+                QListWidget {
+                    font-size: 20px;
+                    background-color:  #1f2e40;
+                    border: 1px solid #ddd;
+                    border-radius: 5px;
+                }
+                QListWidget::item {
+                    padding: 10px;
+                }
+                QListWidget::item:selected {
+                    background-color: #007bff;
+                    color: white;
+                }
+            """)
+            self.my_project_lists.addItem("Keine Projekte verfügbar. Besuchen Sie die Seite 'Projekt erstellen', um ein neues Projekt zu erstellen.")
+            self.content_layout.addWidget(self.my_project_lists)
+
+
         
         
     def show_project_management_interface(self):
@@ -382,10 +549,10 @@ class Dashboard(QMainWindow):
         # Project creation section
         self.project_creation_layout = QHBoxLayout()
         self.project_name_input = QLineEdit()
-        self.project_name_input.setPlaceholderText("Project Name")
+        self.project_name_input.setPlaceholderText("Projektname")
         self.project_number_input = QLineEdit()
-        self.project_number_input.setPlaceholderText("Project Number")
-        create_project_button = QPushButton("Create Project")
+        self.project_number_input.setPlaceholderText("Projektnummer")
+        create_project_button = QPushButton("Projekt erstellen")
         create_project_button.clicked.connect(self.create_project)
 
         self.project_creation_layout.addWidget(self.project_name_input)
@@ -397,12 +564,12 @@ class Dashboard(QMainWindow):
         self.project_list.itemDoubleClicked.connect(self.open_project)
 
         # Results section
-        self.results_label = QLabel("Results will be displayed here")
-        self.chart_widget = QLabel("Chart will be displayed here")
+        self.results_label = QLabel("Ergebnisse werden hier angezeigt")
+        self.chart_widget = QLabel("Diagramm wird hier angezeigt")
         self.chart_widget.setAlignment(Qt.AlignCenter)
 
         # Export button
-        export_button = QPushButton("Export Results")
+        export_button = QPushButton("Ergebnisse exportieren")
         export_button.clicked.connect(self.export_results)
 
         # Add widgets to content layout
@@ -416,36 +583,44 @@ class Dashboard(QMainWindow):
         name = self.project_name_input.text()
         number = self.project_number_input.text()
         if name and number:
+            try:
+                res = core.create_project_table(f"{str(name+"#"+number).lower()}")
+                if not res:
+                    QMessageBox.warning(self, "Fehler", "Projektname existiert bereits! Besuchen Sie meine Projektseite, um darauf zuzugreifen.")
+                    self.project_name_input.clear()
+                    self.project_number_input.clear()
+                    return
+                    
+            except Exception as err:
+                QMessageBox.warning(self, "Fehler", "Projekt konnte nicht erstellt werden, bitte versuchen Sie es erneut.")
+                return  
             project = ProjectItem(name, number)
             self.projects.append(project)
-            self.project_list.addItem(f"{name} (#{number})")
+            # self.project_list.addItem(f"{name} (#{number})")
+            list_item = QListWidgetItem(str(project))  # Display string format
+            list_item.setData(Qt.UserRole, project)  # Store the actual ProjectItem
+            self.project_list.addItem(list_item)
             self.project_name_input.clear()
             self.project_number_input.clear()
         else:
-            QMessageBox.warning(self, "Error", "Please enter a name and number for the project.")
+            QMessageBox.warning(self, "Fehler", "Bitte geben Sie einen Namen und eine Nummer für das Projekt ein.")
 
     def open_project(self, item):
-        project = self.projects[self.project_list.row(item)]
+        # project = self.projects[self.project_list.row(item)]
+        project = item.data(Qt.UserRole)
+        # project = str(f"{project.name}{project.number}").lower()
+        print("project",type(project))
         self.env_impact_calculator = EnvironmentalImpactCalculator(project)  # Instantiate the class
         self.env_impact_calculator.show()
+        
+        
 
-    # def update_results(self, materials):
-    #     self.current_materials = materials
-    #     result_text = "Calculated Materials:\n\n"
-    #     for material, unit, quantity in materials:
-    #         if material is  not None and unit is not None and quantity is not None:
-    #           result_text += f"{material}: {quantity} {unit}\n"
-    #     self.results_label.setText(result_text)
-    #     self.update_chart()
     def update_results(self, materials):
         self.current_materials = materials
         
-        # Clear the existing content in the table if it exists
         if hasattr(self, 'results_table'):
             self.results_table.clear()
             self.results_table.setRowCount(0)  # Reset the row count
-        
-        # Initialize QTableWidget if it does not exist
         if not hasattr(self, 'results_table'):
             self.results_table = QTableWidget(self)
             self.results_table.setColumnCount(3)  # Number of columns (Material, Quantity, Unit)
@@ -466,94 +641,57 @@ class Dashboard(QMainWindow):
         self.update_chart()
 
         
-    def clear_project(self):
-        # if self.project_creation_layout.count() > 0:
-        #     while self.project_creation_layout.count():
-        #         child = self.project_creation_layout.takeAt(0)
-        #         if child.widget():
-        #             child.widget().deleteLater()
-        if hasattr(self, 'project_creation_layout') and self.project_creation_layout.count() > 0:
-            for i in reversed(range(self.project_creation_layout.count())):
-                widget = self.project_creation_layout.itemAt(i).widget()
-                if widget:
-                    widget.deleteLater()
+    def clear_project_creation_layout(self):
+        if hasattr(self, 'project_creation_layout'):
+            while self.project_creation_layout.count() > 0:
+                item = self.project_creation_layout.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
 
-    def update_chart(self):
-        # Clear any existing charts from the layout
-        if self.project_creation_layout.count() > 0:
-            while self.project_creation_layout.count():
-                child = self.project_creation_layout.takeAt(0)
-                if child.widget():
-                    child.widget().deleteLater()
 
-        # Prepare data for charts
-        materials = [m[1] for m in self.current_materials]
-        quantities = [m[2] for m in self.current_materials]
 
-        # Check for valid quantities
-        valid_quantities = [q for q in quantities if not pd.isna(q) and q > 0]
-        valid_materials = [materials[i] for i in range(len(quantities)) if not pd.isna(quantities[i]) and quantities[i] > 0]
-
-        # Bar Chart
-        if valid_materials and valid_quantities:
-            bar_fig, bar_ax = plt.subplots(figsize=(5, 4))
-            bar_ax.bar(valid_materials, valid_quantities)
-            bar_ax.set_title("Material Quantities")
-            bar_ax.set_xlabel("Bezugsgroesse")
-            bar_ax.set_ylabel("GWP")
-            bar_ax.set_xticks(range(len(valid_materials)))
-            bar_ax.set_xticklabels(valid_materials, rotation=45, ha='right')
-            bar_canvas = FigureCanvas(bar_fig)
-            bar_canvas.draw()
-            plt.close(bar_fig)
-            self.project_creation_layout.addWidget(bar_canvas)
-
-        # Pie Chart
-        if valid_materials and valid_quantities and sum(valid_quantities) > 0:
-            pie_fig, pie_ax = plt.subplots(figsize=(5, 4))
-            pie_ax.pie(valid_quantities, labels=valid_materials, autopct='%1.1f%%', startangle=90)
-            pie_ax.set_title("Material Distribution")
-            pie_canvas = FigureCanvas(pie_fig)
-            pie_canvas.draw()
-            plt.close(pie_fig)
-            self.project_creation_layout.addWidget(pie_canvas)
-
-        # Line Chart
-        if valid_materials and valid_quantities:
-            line_fig, line_ax = plt.subplots(figsize=(5, 4))
-            line_ax.plot(valid_materials, valid_quantities, marker='o', linestyle='-', color='b')
-            line_ax.set_title("Material Trend Over Time")
-            line_ax.set_xlabel("Bezugsgroesse")
-            line_ax.set_ylabel("GWP")
-            line_ax.set_xticks(range(len(valid_materials)))
-            line_ax.set_xticklabels(valid_materials, rotation=45, ha='right')
-            line_canvas = FigureCanvas(line_fig)
-            line_canvas.draw()
-            plt.close(line_fig)
-            self.project_creation_layout.addWidget(line_canvas)
 
 
     def export_results(self):
+        # Set default file names for different file types
+        default_csv = "default.csv"
+        default_excel = "default.xlsx"
+        default_pdf = "default.pdf"
+        
         options = QFileDialog.Options()
+        
+        # Display the dialog with the appropriate default file name based on user selection
         file_name, _ = QFileDialog.getSaveFileName(self, "Export Results", "", 
-                                                   "Excel Files (*.xlsx);;PDF Files (*.pdf)", 
-                                                   options=options)
+                                                "Excel Files (*.xlsx);;CSV Files (*.csv);;PDF Files (*.pdf)", 
+                                                options=options,
+                                                initialFilter="CSV Files (*.csv)" if default_csv.endswith('.csv') else "Excel Files (*.xlsx)")
         if file_name:
+            df = core.fecth_data_table()  # Fetch data from the database
             if file_name.endswith('.xlsx'):
-                self.export_to_excel(file_name)
+                self.export_to_excel(file_name, df)
+            elif file_name.endswith('.csv'):
+                self.export_to_csv(file_name, df)
             elif file_name.endswith('.pdf'):
-                self.export_to_pdf(file_name)
+                self.export_to_pdf(file_name, df)
 
-    def export_to_excel(self, file_name):
-        df = pd.DataFrame(self.current_materials, columns=['Material', 'Unit', 'Quantity'])
+    def export_to_excel(self, file_name, df):
         df.to_excel(file_name, index=False)
         QMessageBox.information(self, "Export", f"Results exported as: {file_name}")
 
-    def export_to_pdf(self, file_name):
+    def export_to_csv(self, file_name, df):
+        df.to_csv(file_name, index=False)
+        QMessageBox.information(self, "Export", f"Results exported as: {file_name}")
+
+    def export_to_pdf(self, file_name, df):
+        from reportlab.lib.pagesizes import letter
+        from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+        from reportlab.lib import colors
+
         doc = SimpleDocTemplate(file_name, pagesize=letter)
         elements = []
 
-        data = [['Material', 'Unit', 'Quantity']] + self.current_materials
+        # Convert dataframe to list of lists
+        data = [df.columns.tolist()] + df.values.tolist()
         table = Table(data)
         table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
