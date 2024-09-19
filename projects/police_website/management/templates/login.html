@@ -1,0 +1,55 @@
+{%extends 'main.html'%} {%load static%} {% block main%}
+<div class="login-form">
+  <div class="text">LOGIN</div>
+  <form method="POST">
+    {% csrf_token %} {% if messages %}
+    <div id="message-container" style="display: none">
+      {% for message in messages %} {{ message }} {% endfor %}
+    </div>
+    {% endif %}
+    <div class="field">
+      <div class="fas fa-envelope"></div>
+      <input
+        type="text"
+        placeholder="Email or Phone"
+        name="username"
+        required
+      />
+    </div>
+    <div class="field">
+      <div class="fas fa-lock"></div>
+      <input type="password" placeholder="Password" name="password" required />
+    </div>
+    <button>LOGIN</button>
+    <div class="link">
+      Not a member?
+      <a href="{%url 'user' %}">Signup now</a>
+    </div>
+  </form>
+</div>
+
+<script src="{% static 'js/login.js' %}"></script>
+<script>
+  function showMessages() {
+    const messageContainer = document.getElementById("message-container");
+    if (messageContainer) {
+      const messages = messageContainer.innerText;
+      if (messages.trim() === "Your message sent successfully!.") {
+        Swal.fire({
+          title: "Sent",
+          html: messages,
+          icon: "success",
+        });
+      } else {
+        Swal.fire({
+          title: "Error",
+          html: messages,
+          icon: "warning",
+        });
+      }
+    }
+  }
+  showMessages();
+</script>
+
+{%endblock main%}

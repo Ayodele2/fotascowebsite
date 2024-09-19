@@ -1,0 +1,48 @@
+{%extends 'main.html'%} {%load static%} {% block main%}
+<!-- Signup Form -->
+<div class="login-form">
+  <div class="text">SIGNUP</div>
+
+  <form method="POST">
+    <!-- Username field -->
+    <div class="field">
+      <div class="fas fa-user"></div>
+      <input type="text" name="username" placeholder="Username" required />
+    </div>
+
+    <!-- Email field -->
+    <div class="field">
+      <div class="fas fa-envelope"></div>
+      <input type="email" name="email" placeholder="Email" required />
+    </div>
+
+    <!-- Password field -->
+    <div class="field">
+      <div class="fas fa-lock"></div>
+      <input type="password" name="password" placeholder="Password" required />
+    </div>
+
+    <!-- Confirm Password field -->
+    <div class="field">
+      <div class="fas fa-lock"></div>
+      <input
+        type="password"
+        name="confirm_password"
+        placeholder="Confirm Password"
+        required
+      />
+    </div>
+
+    <!-- Submit button -->
+    <button type="submit">Submit</button>
+
+    <!-- Login link -->
+    <div class="link">
+      Already a member? <a href="{% url 'login' %}">Login Now</a>
+    </div>
+  </form>
+</div>
+
+<!-- JavaScript -->
+<script src="{% static 'js/login.js' %}"></script>
+{%endblock main%}

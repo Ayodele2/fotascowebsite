@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: "Poppins", sans-serif;
+    overflow: hidden;
+}
+
+.table{
+    width: 100%;
+}
+
+.table_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: rgb(240, 240, 240);
+}
+
+.table_header p{
+    color: #000000;
+}
+
+
+.active{
+    border-radius: 50px;
+    background-color: rgb(95, 236, 95);
+    outline: none;
+    border: 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 12px;
+    text-size-adjust: 12px;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    object-fit: cover;
+
+    
+}
+
+.inactive{
+    border: 10px;
+    background-color: rgb(231, 9, 9);
+    outline: none;
+    border: 12px;
+    margin: 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 12px;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    object-fit: cover;
+}
+
+button{
+    outline: none;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    padding: 10px;
+    color: #f6f9fc;
+}
+
+td button:nth-child(1){
+    background-color: #6e390d;
+}
+
+td button:nth-child(2){
+    background-color: #f00000;
+}
+
+.search{
+    padding: 10px 20px;
+    color: #ffffff;
+    background-color: #6e390d;
+}
+
+input{
+    padding: 10px 20px;
+    margin: 0 10px;
+    outline: none;
+    border: 1px solid #6e390d;
+    border-radius: 6px;
+    color: #6e390d;
+}
+
+.table_section{
+    height: 650px;
+    overflow: auto;
+}
+
+table{
+    width: 100%;
+    table-layout: fixed;
+    min-width: 1000px;
+    border-collapse: collapse;
+}
+
+thead th{
+    position: sticky;
+    top: 0;
+    background-color: #f6f9fc;
+    color: #6e390d;
+    font-size: 15px;
+}
+
+.th,td{
+    border-bottom: 1px solid #dddddddd;
+    padding: 10px 20px;
+    word-break: break-all;
+    text-align: center;
+}
+
+tr:hover td{
+    color: #6e390d;
+    cursor: pointer;
+    background-color: #f6f9fc;
+}
+
+::placeholder{
+    color: #6e390d;
+}

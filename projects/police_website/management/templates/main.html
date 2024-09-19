@@ -1,0 +1,90 @@
+{%load static%}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>fotasco</title>
+    <link
+      rel="stylesheet"
+      href="{% static 'css/login.css' %}
+    "
+    />
+    <link rel="stylesheet" href="{% static 'css/form.css' %}" />
+    <script src="https://unpkg.com/sweetalert2@10"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'css/attenance.css' %}" />
+  </head>
+  <body>
+    <nav>
+      <div class="nav-bar">
+        <i class="bx bx-menu sidebarOpen"></i>
+        <span class="logo navLogo"><a href="#">FOTASCO</a></span>
+
+        <div class="menu">
+          <div class="logo-toggle">
+            <span class="logo"><a href="#">FOTASCO</a></span>
+            <i class="bx bx-x siderbarClose"></i>
+          </div>
+
+          <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li><a href="#">payrolls</a></li>
+            <li><a href="#">Attendance</a></li>
+            <li><a href="#">Applications</a></li>
+          </ul>
+        </div>
+
+        <div class="darkLight-searchBox">
+          <div class="dark-light">
+            <i class="bx bx-moon moon"></i>
+            <i class="bx bx-sun sun"></i>
+          </div>
+
+          <div class="searchBox">
+            <div class="searchToggle">
+              <i class="bx bx-x cancel"></i>
+              <i class="bx bx-search search"></i>
+            </div>
+
+            <div class="search-field">
+              <input type="text" placeholder="Search..." />
+              <i class="bx bx-search"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    {% csrf_token %} {% if messages %}
+    <div id="message-container" style="display: none">
+      {% for message in messages %} {{ message }} {% endfor %}
+    </div>
+    {% endif %} {%block main%} {%endblock main%}
+
+    <script>
+      function showMessages() {
+        const messageContainer = document.getElementById("message-container");
+        if (messageContainer) {
+          const messages = messageContainer.innerText;
+          if (messages.trim() === "Your message sent successfully!.") {
+            Swal.fire({
+              title: "Sent",
+              html: messages,
+              icon: "success",
+            });
+          } else {
+            Swal.fire({
+              title: "Error",
+              html: messages,
+              icon: "warning",
+            });
+          }
+        }
+      }
+      showMessages();
+    </script>
+  </body>
+</html>
